@@ -1,0 +1,26 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/nikhilesh/upload1/devel/include/**",
+        "/home/nikhilesh/UR3_ERC_Maintenance_Stack/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/nikhilesh/upload1/src/packages/fiducial_slam/include/**",
+        "/home/nikhilesh/UR3_ERC_Maintenance_Stack/src/roboticsgroup_gazebo_plugins/include/**",
+        "/home/nikhilesh/UR3_ERC_Maintenance_Stack/src/universal_robot/ur_kinematics/include/**",
+        "/home/nikhilesh/upload1/src/packages/vision_msgs/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}

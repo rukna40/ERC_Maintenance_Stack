@@ -1,0 +1,6 @@
+<launch>
+<arg name="tags" default="1,2,3,4"/>
+<node pkg="marsrovermanipal_td1" name="buttonPresser" type="buttons.py" output="screen" respawn="false">
+<param name="tags" value="$(arg tags)"/>
+</node>
+</launch>

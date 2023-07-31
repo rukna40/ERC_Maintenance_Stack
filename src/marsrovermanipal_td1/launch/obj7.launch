@@ -1,0 +1,5 @@
+<launch>
+<include file="$(find aruco_detect)/launch/aruco_detect_hidden.launch"/>
+<node pkg="marsrovermanipal_td1" name="scanHidden" type="scanHidden.py" output="screen" respawn="false">
+</node>
+</launch>

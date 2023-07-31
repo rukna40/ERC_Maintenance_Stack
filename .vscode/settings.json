@@ -1,0 +1,16 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/ankur/ERC-Maintenance-Stack/devel/lib/python3/dist-packages",
+        "/home/ankur/UR3_ERC_Maintenance_Stack/devel/lib/python3/dist-packages",
+        "/home/ankur/ur3_ws/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/ankur/ERC-Maintenance-Stack/devel/lib/python3/dist-packages",
+        "/home/ankur/UR3_ERC_Maintenance_Stack/devel/lib/python3/dist-packages",
+        "/home/ankur/ur3_ws/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages",
+        "./devel/lib/python3/dist-packages"
+    ],
+    "cmake.sourceDirectory": "/home/ankur/ERC-Stack-New/src/marsrovermanipal_td1"
+}
