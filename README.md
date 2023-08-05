@@ -84,7 +84,7 @@ chmod +x *.py
 
  ### Pull docker
  ```sh
- sudo docker pull ghcr.io/rukna40/erc_maintenance_stack:main
+ sudo docker pull ghcr.io/rukna40/erc_maintenance_stack:latest
  ```
  ### Run Codes
 
