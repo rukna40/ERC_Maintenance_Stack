@@ -52,7 +52,7 @@ This repository contains all the competition submissions.
 
 To clone the repo:
 ```sh
-git clone https://github.com/vysh112/ERC-Maintenance-Stack.git
+git clone https://github.com/rukna40/ERC_Maintenance_Stack.git
 ```
 
 navigate to your root directory:
@@ -62,7 +62,7 @@ cd
 clone this repository
 Navigate to the repository:
 ```sh
-cd ERC-Maintenance-Stack
+cd ERC_Maintenance_Stack
 ```
 Now, use the `catkin_make` tool to build the workspace:
 ```sh
@@ -72,7 +72,7 @@ If you don’t want to have to source the setup file every time you open a new s
 ```sh
 echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
-echo "source ~/ERC-Maintenance-Stack/devel/setup.bash" >> ~/.bashrc
+echo "source ~/ERC_Maintenance_Stack/devel/setup.bash" >> ~/.bashrc
 ```
 ## Running the Simulation
 Before running the launch file, you will need to make all the Python files executable.
@@ -84,17 +84,17 @@ chmod +x *.py
 
  ### Pull docker
  ```sh
- sudo docker pull ghcr.io/vysh112/erc-maintenance-stack:main
+ sudo docker pull ghcr.io/rukna40/erc_maintenance_stack:main
  ```
  ### Run Codes
 
  Run the docker.
  ```sh
- sudo docker run -it --net=host --name mrm_img ghcr.io/vysh112/erc-maintenance-stack:main
+ sudo docker run -it --net=host --name mrm_img ghcr.io/rukna40/erc_maintenance_stack:main
  ```
  Navigate to the scripts folder inside the docker.
  ```sh
- cd src/marsrovermanipal_td1/scripts
+ cd src/marsrovermanipal_td2/scripts
  ```
  Make the scripts executable.
  ```sh
@@ -102,7 +102,7 @@ chmod +x *.py
  ```
  Navigate back to the root directory.
  ```sh
- cd ../../
+ cd ../../../
  ```
  Open another terminal and navigate to UR3 simulation directory.
  ```sh
@@ -122,7 +122,7 @@ chmod +x *.py
  ```
  Launch the Objectives.
  ```sh
- roslaunch marsrovermanipal_td1 obj1.launch.
+ roslaunch marsrovermanipal_td2 obj1.launch.
  ```
  ### Launching the Objective
 To run the simulation, run `roslaunch <package_name> obj<objective_no>.launch` and the parameters if any.
@@ -131,41 +131,41 @@ Example:
 
 - objective 1
 ```sh
-roslaunch marsrovermanipal_td1 obj1.launch
+roslaunch marsrovermanipal_td2 obj1.launch
 ```
 - objective 2
 ```sh
-roslaunch marsrovermanipal_td1 obj2.launch tags:="1, 2, 3, 4"
+roslaunch marsrovermanipal_td2 obj2.launch tags:="1, 2, 3, 4"
 ```
 - objective 3
 ```sh
-roslaunch marsrovermanipal_td1 obj3.launch
+roslaunch marsrovermanipal_td2 obj3.launch
 ```
 - objective 4
 ```sh
-roslaunch marsrovermanipal_td1 obj4.launch angle:=45
+roslaunch marsrovermanipal_td2 obj4.launch angle:=45
 ```
 - objective 5
 ```sh
-roslaunch marsrovermanipal_td1 obj5.launch
+roslaunch marsrovermanipal_td2 obj5.launch
 ```
 - objective 6
 ```sh
-roslaunch marsrovermanipal_td1 obj6.launch
+roslaunch marsrovermanipal_td2 obj6.launch
 ```
 - objective 7
 ```sh
-roslaunch marsrovermanipal_td1 obj7.launch
+roslaunch marsrovermanipal_td2 obj7.launch
 ```
 - objective 8
 ```sh
-roslaunch marsrovermanipal_td1 obj8.launch
+roslaunch marsrovermanipal_td2 obj8.launch
 ```
 - objective 9
 ```sh
-roslaunch marsrovermanipal_td1 obj9.launch tag:="1"
+roslaunch marsrovermanipal_td2 obj9.launch tag:="1"
 ```
 - objective 10
 ```sh
-roslaunch marsrovermanipal_td1 obj10.launch
+roslaunch marsrovermanipal_td2 obj10.launch
 ```
