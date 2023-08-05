@@ -42,7 +42,7 @@ def press(id, move_group):
         currentPose = move_group.get_current_pose().pose
         waypoints = []
         minus = 0.118 #0.114
-        if id <= 3: #6 for real case
+        if id <= 6: #3 for unreal case
             minus = 0.130 #0.126
         currentPose.position.x = position[0] - minus
         currentPose.position.z = position[2] - 0.055
@@ -68,7 +68,7 @@ def press(id, move_group):
         (plan, fraction) = move_group.compute_cartesian_path(waypoints, 0.005, 0.0)
         move_group.execute(plan, wait=True)
 
-        if id in (2, 3, 4):  # for the real case put 4-9
+        if id in (4,5,6,7,8,9):  # for the real case put 4-9
             move_group.go([radians(-44), radians(-123), radians(114), radians(8), radians(46), radians(-90)])
         else:
             move_group.go([radians(0), radians(-120), radians(100), radians(20), radians(90), radians(-90)])
