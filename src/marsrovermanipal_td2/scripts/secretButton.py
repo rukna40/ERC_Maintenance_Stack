@@ -13,10 +13,14 @@ move_group =moveit_commander.MoveGroupCommander(group_name)
 robot = moveit_commander.RobotCommander()
 gripperPos("close")
 rospy.sleep(3)
+
 try:
     i = rospy.get_param('hiddenButton')
+    print(i)
 except:
-    i=1
+    i = int(rospy.get_param('~tag'))
+    rospy.loginfo(i)
+
 press(i, move_group)
 rospy.sleep(3)
 gripperPos("open")

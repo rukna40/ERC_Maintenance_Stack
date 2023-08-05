@@ -34,9 +34,13 @@ Inspec_panel=rospy.get_param('tag12')#[[0.33652467558540594, -0.2749759883220442
 Inspec_lid_storage= rospy.get_param('tag14')#[[0.2627005704280358, -0.18725236367743253, -0.14572040839702463],[-0.004944659506009925, -0.0049388815186685335, -0.7114809434512608, 0.7026706375660068]]
 
 gripperPos("open")
+rospy.sleep(3)
 goToUp(move_group)
+rospy.sleep(3)
 lid_original_position = PickLid(Inspec_panel, move_group)
+rospy.sleep(2)
 gripperPos("semi_close")
+rospy.sleep(2)
 lid_store_position=StoreLid(Inspec_lid_storage, move_group)
 rospy.sleep(4)
 pose = ([lid_store_position.position.x, lid_store_position.position.y, lid_store_position.position.z],[lid_store_position.orientation.x, lid_store_position.orientation.y, lid_store_position.orientation.z, lid_store_position.orientation.w])

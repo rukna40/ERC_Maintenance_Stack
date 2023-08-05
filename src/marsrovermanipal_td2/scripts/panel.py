@@ -92,11 +92,15 @@ def goToUp(move_group):
 
 
 def PickLid(box,move_group):
-
+    aboveStoragePre = [radians(152), radians(-83), radians(-61),
+                    radians(-104), radians(96), radians(80)]
+    
     aboveStorage = [radians(150), radians(-80), radians(-75),
                     radians(-95), radians(95), radians(80)]
+    move_group.go(aboveStoragePre)
+    rospy.sleep(2)
     move_group.go(aboveStorage)
-
+    
     waypoints = []
     end = move_group.get_end_effector_link()
     wpose = move_group.get_current_pose(end).pose
@@ -157,8 +161,8 @@ def StoreLid(lidStorage,move_group):
     rospy.sleep(3)
     waypoints = []
 
-    wpose.position.x = lidStorage[0][0] - 0.0679 #+ 0.1925*sin(wrist_1_joint_angle)#*cos(yaw-wrist_3_joint_angle)
-    wpose.position.y = lidStorage[0][1] - 0.0679 #- 0.1925*sin(wrist_1_joint_angle)#*sin(yaw-wrist_3_joint_angle)
+    wpose.position.x = lidStorage[0][0] #- 0.0679 #+ 0.1925*sin(wrist_1_joint_angle)#*cos(yaw-wrist_3_joint_angle)
+    wpose.position.y = lidStorage[0][1] #- 0.0679 #- 0.1925*sin(wrist_1_joint_angle)#*sin(yaw-wrist_3_joint_angle)
 
     waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = move_group.compute_cartesian_path(
@@ -166,15 +170,15 @@ def StoreLid(lidStorage,move_group):
     move_group.execute(plan, wait=True)
     print("back")
 
-    waypoints = []
-    wpose.position.z = lidStorage[0][2] + 0.2
+    # waypoints = []
+    # wpose.position.z = lidStorage[0][2] + 0.2
     
-    waypoints.append(copy.deepcopy(wpose))
-    (plan, fraction) = move_group.compute_cartesian_path(
-        waypoints, 0.01, 0.0, True)
-    move_group.execute(plan, wait=True)
-    print("down")
-    print("")
+    # waypoints.append(copy.deepcopy(wpose))
+    # (plan, fraction) = move_group.compute_cartesian_path(
+    #     waypoints, 0.01, 0.0, True)
+    # move_group.execute(plan, wait=True)
+    # print("down")
+    # print("")
 
     waypoints = []
     joint_values = move_group.get_current_joint_values()
@@ -185,8 +189,8 @@ def StoreLid(lidStorage,move_group):
     wrist_3_joint_index = move_group.get_joints().index("wrist_3_joint")
     wrist_3_joint_angle = joint_values[wrist_3_joint_index]
     
-    wpose.position.x = lidStorage[0][0] - 0.0679 - 0.1925*sin(wrist_1_joint_angle)*cos(yaw-wrist_3_joint_angle)
-    wpose.position.y = lidStorage[0][1] - 0.0679 + 0.1925*sin(wrist_1_joint_angle)*sin(yaw-wrist_3_joint_angle)
+    wpose.position.x = lidStorage[0][0] - 0.0679 -0.02 #- 0.1925*sin(wrist_1_joint_angle)*cos(yaw-wrist_3_joint_angle)
+    wpose.position.y = lidStorage[0][1] - 0.0679 #+ 0.1925*sin(wrist_1_joint_angle)*sin(yaw-wrist_3_joint_angle)
 
     print(0.1925*sin(wrist_1_joint_angle)*cos(yaw - wrist_3_joint_angle))
     print(0.1925*sin(wrist_1_joint_angle)*sin(yaw - wrist_3_joint_angle))
