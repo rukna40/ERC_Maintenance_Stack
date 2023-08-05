@@ -163,7 +163,7 @@ roslaunch marsrovermanipal_td1 obj8.launch
 ```
 - objective 9
 ```sh
-roslaunch marsrovermanipal_td1 obj9.launch tag:=5
+roslaunch marsrovermanipal_td1 obj9.launch tag:="1"
 ```
 - objective 10
 ```sh
