@@ -102,8 +102,8 @@ def nodeKiller(toKill, aruco, override = False):
         diff = ((datetime.datetime.now() - isStart).total_seconds())/60.0
         if len(aruco.aruco)>=14 or diff>=3:            
             sleep(2)
-            # move_group.go(home)
-            # sleep(4)
+            move_group.go(home)
+            sleep(4)
             gripperPos("close")
             sleep(2)
             os.system("rosnode kill aruco_detect")
