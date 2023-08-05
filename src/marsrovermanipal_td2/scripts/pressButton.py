@@ -41,9 +41,9 @@ def press(id, move_group):
         button = Pose()
         currentPose = move_group.get_current_pose().pose
         waypoints = []
-        minus = 0.118 #0.114
+        minus = 0.114 #0.118
         if id <= 6: #3 for unreal case
-            minus = 0.130 #0.126
+            minus = 0.126#0.130 
         currentPose.position.x = position[0] - minus
         currentPose.position.z = position[2] - 0.055
         waypoints.append(copy.deepcopy(currentPose))
