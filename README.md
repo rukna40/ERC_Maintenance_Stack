@@ -90,7 +90,7 @@ chmod +x *.py
 
  Run the docker.
  ```sh
- sudo docker run -it --net=host --name mrm_img ghcr.io/rukna40/erc_maintenance_stack:main
+ sudo docker run -it --net=host --name mrm_img ghcr.io/rukna40/erc_maintenance_stack:latest
  ```
  Navigate to the scripts folder inside the docker.
  ```sh
