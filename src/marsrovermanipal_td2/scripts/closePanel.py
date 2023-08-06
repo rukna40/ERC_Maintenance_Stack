@@ -29,12 +29,17 @@ display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path
 lid_pos = rospy.get_param('tag13')#[[0.14753648982289141,-0.19949166597950677,-0.13262711210629644],[-0.006622104699622651,-0.009061137655766759,-0.7044306145019219,0.7096841218923916]]
 # arucoID = 12
 move_group.go([0,-(pi/2), 0, -(pi/2), 0, 0])
-Inspec_panel = rospy.get_param('tag12')#[[0.33652467558540594, -0.2749759883220442, 0.20541202056776836],[ -0.41392029095141303, 0.5599210594303042, 0.5785001056771537, -0.4248482407597626]]
+rospy.sleep(3)
+gripperPos("open")
+rospy.sleep(2)
+Inspec_panel =[[0.4543321460818059, -0.27308862481984303, 0.20675289603645802], [-0.41393664848981404, 0.5613857914087025, 0.5813523239313731, -0.41895702252094025]]# rospy.get_param('tag12')
 lid_store_pos=rospy.get_param('lidStorage')
 GoToLid(lid_pos,lid_store_pos, move_group)
+rospy.sleep(2)
 gripperPos("semi_close")
-rospy.sleep(4)
+rospy.sleep(3)
 PlaceLid(Inspec_panel,move_group)
+rospy.sleep(2)
 gripperPos("open")
-rospy.sleep(4)
+rospy.sleep(3)
 move_group.go([0,-(pi/2), 0, -(pi/2), 0, 0])

@@ -43,8 +43,23 @@ ls = tf.TransformListener()
 
 display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path', moveit_msgs.msg.DisplayTrajectory, queue_size=20)
 gripperPos("open")
-rospy.sleep(2)
-move_group.go([radians(150),radians(-61),radians(-118),radians(-77),radians(92),radians(58)])
+rospy.sleep(3)
+
+
+# scan=rospy.get_param('tag14')
+scan=[[0.378707047206316, -0.18283937512228204, -0.1344733802356643], [-0.04107175299356068, -0.050058705746646635, -0.7181035289303752, 0.692794482781875]]
+
+
+waypoints = []
+
+wpose = move_group.get_current_pose().pose
+wpose.position.z = scan[0][2] + 0.3
+
+waypoints.append(copy.deepcopy(wpose))
+(plan, fraction) = move_group.compute_cartesian_path(
+        waypoints, 0.01, 0.0, True)
+move_group.execute(plan, wait=True)
+#move_group.go([radians(150),radians(-61),radians(-118),radians(-77),radians(92),radians(58)])
 
 rospy.Subscriber('fiducial_transforms', FiducialTransformArray, callback)
 while True:

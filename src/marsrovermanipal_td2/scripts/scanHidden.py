@@ -60,10 +60,15 @@ br = tf.TransformBroadcaster()
 ls = tf.TransformListener()
 display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path', moveit_msgs.msg.DisplayTrajectory, queue_size=20)
 # arucoID = 12
+#Inspec_panel=[[0.4543321460818059, -0.27308862481984303, 0.20675289603645802], [-0.41393664848981404, 0.5613857914087025, 0.5813523239313731, -0.41895702252094025]]#rospy.get_param('tag12')
+gripperPos("open",)
 #Inspec_panel = rospy.get_param('tag12')[0]#[0.33565261545991887, -0.2745230369010141, 0.2059755184403631]
 # move_group.go([radians(155),radians(-124),radians(-21),radians(-118),radians(91),radians(85)])
 #GoToScan(Inspec_panel, move_group)
 scan=rospy.get_param('tag12')#[[0.33652467558540594, -0.2749759883220442, 0.20541202056776836], [-0.41392029095141303, 0.5599210594303042, 0.5785001056771537, -0.4248482407597626]]
+
+# scan=[[0.4543321460818059, -0.27308862481984303, 0.20675289603645802], [-0.41393664848981404, 0.5613857914087025, 0.5813523239313731, -0.41895702252094025]]#rospy.get_param('tag12')
+
 GoToScan(scan, move_group)
 rospy.Subscriber('fiducial_transforms', FiducialTransformArray, callback)
 while flag:

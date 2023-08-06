@@ -92,36 +92,29 @@ def goToUp(move_group):
 
 
 def PickLid(box,move_group):
-    aboveStoragePre = [radians(152), radians(-83), radians(-61),
-                    radians(-104), radians(96), radians(80)]
+    # aboveStoragePre = [radians(152), radians(-83), radians(-61),radians(-104), radians(96), radians(80)]
+    # aboveStoragePre = [radians(161), radians(-74), radians(-82),radians(-66), radians(92), radians(90)]
+    aboveStoragePre = [radians(146), radians(-83), radians(-76),radians(-65), radians(104), radians(79)]
+
+
     
-    aboveStorage = [radians(150), radians(-80), radians(-75),
-                    radians(-95), radians(95), radians(80)]
+    # aboveStorage = [radians(150), radians(-80), radians(-75),radians(-95), radians(95), radians(80)]
     move_group.go(aboveStoragePre)
     rospy.sleep(2)
-    move_group.go(aboveStorage)
+    # move_group.go(aboveStorage)
     
     waypoints = []
     end = move_group.get_end_effector_link()
     wpose = move_group.get_current_pose(end).pose
     # print(wpose)
 
-    eular = quaternion_to_euler(box[1][0], box[1][1], box[1][2], box[1][3])
-    eular = list(eular)
-    eular[0] = eular[0] + radians(90)
-    eular[1] = 0.4
-    eular[2] = eular[2] - radians(90)
-
-    qua = euler_to_quaternion(eular[0], eular[1], eular[2])
-    print(qua)
-
-    wpose.position.x = box[0][0] + 0.01
-    wpose.position.y = box[0][1] - 0.0032
-    wpose.position.z = box[0][2] + 0.125
-    wpose.orientation.x = qua[0]
-    wpose.orientation.y = qua[1]
-    wpose.orientation.z = qua[2]
-    wpose.orientation.w = qua[3]
+    wpose.position.x = box[0][0] + 0.005
+    wpose.position.y = box[0][1] - 0.005
+    wpose.position.z = box[0][2] + 0.11
+    # wpose.orientation.x = qua[0]
+    # wpose.orientation.y = qua[1]
+    # wpose.orientation.z = qua[2]
+    # wpose.orientation.w = qua[3]
 
     waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = move_group.compute_cartesian_path(
@@ -140,7 +133,7 @@ def PickLid(box,move_group):
     return [wpose.position.x, wpose.position.y, wpose.position.z]
 
 
-def StoreLid(lidStorage,move_group):
+def StoreLid(box,lidStorage,move_group):
 
     end = move_group.get_end_effector_link()
     wpose = move_group.get_current_pose(end).pose
@@ -149,7 +142,6 @@ def StoreLid(lidStorage,move_group):
     eular = quaternion_to_euler(lidStorage[1][0], lidStorage[1][1], lidStorage[1][2], lidStorage[1][3])
     yaw = eular[2]
 
-    
 
     waypoints = []
     wpose.position.z += 0.02
@@ -159,10 +151,11 @@ def StoreLid(lidStorage,move_group):
     move_group.execute(plan, wait=True)
     print("up")
     rospy.sleep(3)
+
     waypoints = []
 
-    wpose.position.x = lidStorage[0][0] #- 0.0679 #+ 0.1925*sin(wrist_1_joint_angle)#*cos(yaw-wrist_3_joint_angle)
-    wpose.position.y = lidStorage[0][1] #- 0.0679 #- 0.1925*sin(wrist_1_joint_angle)#*sin(yaw-wrist_3_joint_angle)
+    wpose.position.x = lidStorage[0][0] - 0.0679 #+ 0.1925*sin(wrist_1_joint_angle)#*cos(yaw-wrist_3_joint_angle)
+    wpose.position.y = lidStorage[0][1] - 0.0679 #- 0.1925*sin(wrist_1_joint_angle)#*sin(yaw-wrist_3_joint_angle)
 
     waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = move_group.compute_cartesian_path(
@@ -180,20 +173,51 @@ def StoreLid(lidStorage,move_group):
     # print("down")
     # print("")
 
+
+
+    eular = quaternion_to_euler(box[1][0], box[1][1], box[1][2], box[1][3])
+    eular = list(eular)
+    eular[0] = eular[0] + radians(90)
+    eular[1] = 0.4
+    eular[2] = eular[2] - radians(90)
+
+    qua = euler_to_quaternion(eular[0], eular[1], eular[2])
+
+    waypoints = []
+    end = move_group.get_end_effector_link()
+    wpose = move_group.get_current_pose(end).pose
+
+    wpose.orientation.x = qua[0]
+    wpose.orientation.y = qua[1]
+    wpose.orientation.z = qua[2]
+    wpose.orientation.w = qua[3]
+
+    waypoints.append(copy.deepcopy(wpose))
+    (plan, fraction) = move_group.compute_cartesian_path(
+        waypoints, 0.01, 0.0, True)
+    move_group.execute(plan, wait=True)
+    print("Reached Lid Potition")
+    wpose = move_group.get_current_pose(end).pose
+    print(wpose)
+    print("")
+
+
+
+
     waypoints = []
     joint_values = move_group.get_current_joint_values()
     rospy.loginfo("Joint values: {}".format(joint_values))
 
-    wrist_1_joint_index = move_group.get_joints().index("wrist_1_joint")
-    wrist_1_joint_angle = joint_values[wrist_1_joint_index]
-    wrist_3_joint_index = move_group.get_joints().index("wrist_3_joint")
-    wrist_3_joint_angle = joint_values[wrist_3_joint_index]
+    # wrist_1_joint_index = move_group.get_joints().index("wrist_1_joint")
+    # wrist_1_joint_angle = joint_values[wrist_1_joint_index]
+    # wrist_3_joint_index = move_group.get_joints().index("wrist_3_joint")
+    # wrist_3_joint_angle = joint_values[wrist_3_joint_index]
     
     wpose.position.x = lidStorage[0][0] - 0.0679 -0.02 #- 0.1925*sin(wrist_1_joint_angle)*cos(yaw-wrist_3_joint_angle)
     wpose.position.y = lidStorage[0][1] - 0.0679 #+ 0.1925*sin(wrist_1_joint_angle)*sin(yaw-wrist_3_joint_angle)
 
-    print(0.1925*sin(wrist_1_joint_angle)*cos(yaw - wrist_3_joint_angle))
-    print(0.1925*sin(wrist_1_joint_angle)*sin(yaw - wrist_3_joint_angle))
+    # print(0.1925*sin(wrist_1_joint_angle)*cos(yaw - wrist_3_joint_angle))
+    # print(0.1925*sin(wrist_1_joint_angle)*sin(yaw - wrist_3_joint_angle))
     
     waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = move_group.compute_cartesian_path(
@@ -201,7 +225,7 @@ def StoreLid(lidStorage,move_group):
     move_group.execute(plan, wait=True)
     
     waypoints = []
-    wpose.position.z = lidStorage[0][2] + 0.1
+    wpose.position.z = lidStorage[0][2] + 0.115
     
     waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = move_group.compute_cartesian_path(
@@ -217,13 +241,15 @@ def StoreLid(lidStorage,move_group):
 
 
 def GoToScan(box,move_group):
-
+    aboveStoragePre = [radians(146), radians(-83), radians(-76),radians(-65), radians(104), radians(79)]
+    move_group.go(aboveStoragePre)
+    rospy.sleep(2)
     end = move_group.get_end_effector_link()
     wpose = move_group.get_current_pose(end).pose
     # print(wpose)
 
     waypoints = []
-    wpose.position.z = box[0][2] + 0.125
+    wpose.position.z = box[0][2] + 0.18
 
     waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = move_group.compute_cartesian_path(
@@ -232,7 +258,7 @@ def GoToScan(box,move_group):
 
     waypoints = []
     wpose.position.x = box[0][0] - 0.05
-    wpose.position.y = box[0][1] - 0.0032
+    wpose.position.y = box[0][1] - 0.005
 
     waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = move_group.compute_cartesian_path(
@@ -297,22 +323,32 @@ def PlaceLid(lid_position,move_group):
     move_group.execute(plan, wait=True)
     print("up")
 
-    eular = quaternion_to_euler(lid_position[1][0], lid_position[1][1], lid_position[1][2], lid_position[1][3])
-    eular = list(eular)
-    eular[0] = eular[0] + radians(90)
-    eular[1] = 0.4
-    eular[2] = eular[2] - radians(90)
+    # eular = quaternion_to_euler(lid_position[1][0], lid_position[1][1], lid_position[1][2], lid_position[1][3])
+    # eular = list(eular)
+    # eular[0] = eular[0] + radians(90)
+    # eular[1] = 0.79511
+    # eular[2] = eular[2] - radians(90)
 
-    qua = euler_to_quaternion(eular[0], eular[1], eular[2])
+    # qua = euler_to_quaternion(eular[0], eular[1], eular[2])
+
+    aboveStoragePre = [radians(146), radians(-83), radians(-76),radians(-65), radians(104), radians(79)]
+    move_group.go(aboveStoragePre)
+    rospy.sleep(3)
 
     waypoints = []
-    wpose = move_group.get_current_pose().pose
-    wpose.position.x = lid_position[0][0] + 0.01
-    wpose.position.y = lid_position[0][1] - 0.0032
-    wpose.orientation.x = qua[0]
-    wpose.orientation.y = qua[1]
-    wpose.orientation.z = qua[2]
-    wpose.orientation.w = qua[3]
+
+    end = move_group.get_end_effector_link()
+    wpose = move_group.get_current_pose(end).pose
+    print(wpose)
+
+    # wpose = move_group.get_current_pose().pose
+    wpose.position.x = lid_position[0][0] - 0.02
+    wpose.position.y = lid_position[0][1] #- 0.0032
+    # wpose.orientation.x = qua[0]
+    # wpose.orientation.y = qua[1]
+    # wpose.orientation.z = qua[2]
+    # wpose.orientation.w = qua[3]  
+
 
     waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = move_group.compute_cartesian_path(
@@ -322,7 +358,7 @@ def PlaceLid(lid_position,move_group):
     waypoints = []
     wpose = move_group.get_current_pose().pose
 
-    wpose.position.z = lid_position[0][2] + 0.12
+    wpose.position.z = lid_position[0][2] + 0.13
 
     waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = move_group.compute_cartesian_path(

@@ -28,21 +28,20 @@ robot = moveit_commander.RobotCommander()
 display_trajectory_publisher = rospy.Publisher('/move_group/display_planned_path', moveit_msgs.msg.DisplayTrajectory, queue_size=20)
 
 # arucoID = 12
-Inspec_panel=rospy.get_param('tag12')#[[0.33652467558540594, -0.2749759883220442, 0.20541202056776836], [-0.41392029095141303, 0.5599210594303042, 0.5785001056771537, -0.4248482407597626]]
+Inspec_panel=[[0.4543321460818059, -0.27308862481984303, 0.20675289603645802], [-0.41393664848981404, 0.5613857914087025, 0.5813523239313731, -0.41895702252094025]]#rospy.get_param('tag12')
 # arucoID = 14
 
-Inspec_lid_storage= rospy.get_param('tag14')#[[0.2627005704280358, -0.18725236367743253, -0.14572040839702463],[-0.004944659506009925, -0.0049388815186685335, -0.7114809434512608, 0.7026706375660068]]
+Inspec_lid_storage=[[0.378707047206316, -0.18283937512228204, -0.1344733802356643], [-0.04107175299356068, -0.050058705746646635, -0.7181035289303752, 0.692794482781875]]#rospy.get_param('tag14')
 
 gripperPos("open")
-rospy.sleep(3)
+rospy.sleep(2)
 goToUp(move_group)
 rospy.sleep(3)
 lid_original_position = PickLid(Inspec_panel, move_group)
 rospy.sleep(2)
 gripperPos("semi_close")
-rospy.sleep(2)
-lid_store_position=StoreLid(Inspec_lid_storage, move_group)
-rospy.sleep(4)
+rospy.sleep(3)
+lid_store_position=StoreLid(Inspec_panel,Inspec_lid_storage, move_group)
 pose = ([lid_store_position.position.x, lid_store_position.position.y, lid_store_position.position.z],[lid_store_position.orientation.x, lid_store_position.orientation.y, lid_store_position.orientation.z, lid_store_position.orientation.w])
 rospy.set_param('lidStorage',pose)
 rospy.sleep(4)
