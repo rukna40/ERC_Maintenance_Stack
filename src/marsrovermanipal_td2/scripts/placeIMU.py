@@ -19,7 +19,8 @@ gripper_group = moveit_commander.MoveGroupCommander("gripper")
 robot = moveit_commander.RobotCommander()
 
 IMU_orientation = float(rospy.get_param('angle'))
-Panel = [[0.40932626600050137,0.34655615615960345,0.5167615000923605],[0.5384723206812556,-0.39617854501926364,-0.4329243277084065,0.5968683977392999]]#rospy.get_param("tag11")
+Panel = rospy.get_param("tag11") #[[0.40932626600050137,0.34655615615960345,0.5167615000923605],[0.5384723206812556,-0.39617854501926364,-0.4329243277084065,0.5968683977392999]]
+
 
 def euler_to_quaternion(roll, pitch, yaw):
     quaternion = tf.transformations.quaternion_from_euler(roll, pitch, yaw)
