@@ -28,12 +28,15 @@ def extend_position(move_group, max_steps):
         current_step += 1
     rospy.sleep(1)
 
-def press(id, move_group):
+def press(id, move_group, previous_subscriber=None):
     global flag
+    if previous_subscriber:
+        previous_subscriber.unregister()
     move_group.go([radians(0), radians(-120), radians(100), radians(20), radians(90), radians(-90)])
     gripperPos("close")
     move_group.set_pose_reference_frame('base_link')
-    rospy.Subscriber("/button"+str(id), Bool, callback)
+    but = "/button"+str(id)
+    new_subscriber = rospy.Subscriber(but, Bool, callback)
 
     if rospy.has_param('tag'+str(id)):
         pose = rospy.get_param('tag'+str(id))
@@ -44,19 +47,19 @@ def press(id, move_group):
         minus = 0.118 #0.114
         if id <= 3: #6 for real case
             minus = 0.130 #0.126
-        currentPose.position.x = position[0] - minus
-        currentPose.position.z = position[2] - 0.055
+        currentPose.position.x = position[0] - 0.15
+        currentPose.position.y = position[1] 
         waypoints.append(copy.deepcopy(currentPose))
         (plan, fraction) = move_group.compute_cartesian_path(waypoints, 0.01, 0.0)
         move_group.execute(plan, wait=True)
 
         #if id >= 0:
-        currentPose.position.y = position[1]
+        currentPose.position.z = position[2] -0.055
         waypoints = []
         waypoints.append(copy.deepcopy(currentPose))
         (plan, fraction) = move_group.compute_cartesian_path(waypoints, 0.005, 0.0)
         move_group.execute(plan, wait=True)
-        max_steps = 24 #22
+        max_steps = 50#22
         
         # Extend the gripper
         extend_position(move_group, max_steps)
@@ -75,3 +78,4 @@ def press(id, move_group):
     else:
         rospy.logerr("Parameter 'tag%d' not found." % id)
     flag = False
+    return new_subscriber
