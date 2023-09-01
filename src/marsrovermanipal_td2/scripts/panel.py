@@ -17,9 +17,8 @@ from geometry_msgs.msg import Pose, Point, Quaternion
 from math import pi
 from std_msgs.msg import String
 from moveit_msgs.msg import MoveGroupActionResult, RobotState
-import time
 from gripperControl import *
-
+from time import sleep
 
 #rospy.init_node("InspectionPanel", anonymous=True)
 group_name = "manipulator"
@@ -225,7 +224,7 @@ def StoreLid(box,lidStorage,move_group):
     move_group.execute(plan, wait=True)
     
     waypoints = []
-    wpose.position.z = lidStorage[0][2] + 0.115
+    wpose.position.z = lidStorage[0][2] + 0.15#0.115
     
     waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = move_group.compute_cartesian_path(
@@ -241,8 +240,9 @@ def StoreLid(box,lidStorage,move_group):
 
 
 def GoToScan(box,move_group):
-    aboveStoragePre = [radians(146), radians(-83), radians(-76),radians(-65), radians(104), radians(79)]
-    move_group.go(aboveStoragePre)
+    # aboveStoragePre = [radians(146), radians(-83), radians(-76),radians(-65), radians(104), radians(79)]
+    aboveStorage1 = [radians(156), radians(-83), radians(-69),radians(-81), radians(96), radians(85)]
+    move_group.go(aboveStorage1)
     rospy.sleep(2)
     end = move_group.get_end_effector_link()
     wpose = move_group.get_current_pose(end).pose
@@ -256,14 +256,27 @@ def GoToScan(box,move_group):
         waypoints, 0.01, 0.0, True)
     move_group.execute(plan, wait=True)
 
+
     waypoints = []
     wpose.position.x = box[0][0] - 0.05
-    wpose.position.y = box[0][1] - 0.005
-
+    wpose.position.y = box[0][1] #- 0.005
+    wpose.position.z = box[0][2] + 0.12
     waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = move_group.compute_cartesian_path(
         waypoints, 0.01, 0.0, True)
     move_group.execute(plan, wait=True)
+
+    sleep(3)
+
+    waypoints = []
+    wpose.position.x = box[0][0] - 0.02
+    wpose.position.y = box[0][1] #- 0.005
+    wpose.position.z = box[0][2] + 0.12
+    waypoints.append(copy.deepcopy(wpose))
+    (plan, fraction) = move_group.compute_cartesian_path(
+        waypoints, 0.01, 0.0, True)
+    move_group.execute(plan, wait=True)
+
     print("Scanning Position Reached")
     print("")
 

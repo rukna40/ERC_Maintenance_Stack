@@ -14,66 +14,59 @@ import numpy as np
 import moveit_msgs.msg
 class arucoPos:
     aruco = {}
+    pose = {}
     br = None
     ls = None
-    pose = {1:([],[]),2:([],[]),3:([],[]),4:([],[]),5:([],[]),6:([],[]),7:([],[]),8:([],[]),9:([],[]),10:([],[]),11:([],[]),12:([],[]),13:([],[]),14:([],[])}
+    aruco_temp = {1:[[],[]],2:[[],[]],3:[[],[]],4:[[],[]],5:[[],[]],6:[[],[]],7:[[],[]],8:[[],[]],9:[[],[]],10:[[],[]],11:[[],[]],12:[[],[]],13:[[],[]],14:[[],[]]}    
+    aruco_count = {1:0,2:0,3:0,4:0,5:0,6:0,7:0,8:0,9:0,10:0,11:0,12:0,13:0,14:0}
+    aruco_sum = {1:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]],2:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]],3:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]],4:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]],5:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]],6:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]],7:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]],8:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]],9:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]],10:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]],11:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]],12:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]],13:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]],14:[[0.0, 0.0, 0.0],[0.0, 0.0, 0.0, 0.0]]}
 
-    def avgTransform(self, transform, newTransform):
-        if transform==([],[]):
+    # def sumTransform(self, transform, newTransform):
+    #     if transform==([],[]):
+    #         transform=newTransform
+    #     else:
+    #         transform[0][0] += newTransform[0][0]
+    #         transform[0][1] += newTransform[0][1]
+    #         transform[0][2] += newTransform[0][2]
+    #         transform[1][0] += newTransform[1][0]
+    #         transform[1][1] += newTransform[1][1]
+    #         transform[1][2] += newTransform[1][2]
+    #         transform[1][3] += newTransform[1][3]
+    #     return transform
+    def sumTransform(self, transform, newTransform):
+        if transform==[]:
             transform=newTransform
         else:
-            transform[0][0] = (transform[0][0] + newTransform[0][0])/2
-            transform[0][1] = (transform[0][1] + newTransform[0][1])/2
-            transform[0][2] = (transform[0][2] + newTransform[0][2])/2
-            transform[1][0] = (transform[1][0] + newTransform[1][0])/2
-            transform[1][1] = (transform[1][1]+ newTransform[1][1])/2
-            transform[1][2] = (transform[1][2] + newTransform[1][2])/2
-            transform[1][3] = (transform[1][3] + newTransform[1][3])/2
+            transform[0] += newTransform[0]
+            transform[1] += newTransform[1]
+            transform[2] += newTransform[2]
+            # transform[1][0] += newTransform[1][0]
+            # transform[1][1] += newTransform[1][1]
+            # transform[1][2] += newTransform[1][2]
+            # transform[1][3] += newTransform[1][3]
         return transform
-        # sumtx=0
-        # sumty=0
-        # sumtz=0
-        # sumrx=0
-        # sumry=0
-        # sumrz=0
-        # sumrw=0
-        # for i in pos[id]:
-        #     sumtx+=i[0][0]
-        #     sumty+=i[0][1]
-        #     sumtz+=i[0][2]
-        #     sumrx+=i[0][3]
-        #     sumry+=i[1][0]
-        #     sumrz+=i[1][1]
-        #     sumrw+=i[1][2]
-
-        # self.aruco[id].translation.x = sumtx/len(pos[id])
-        # self.aruco[id].translation.y = sumty/len(pos[id])
-        # self.aruco[id].translation.z = sumtz/len(pos[id])
-        # self.aruco[id].rotation.x = sumrx/len(pos[id])       
-        # self.aruco[id].rotation.y = sumry/len(pos[id])
-        # self.aruco[id].rotation.z = sumrz/len(pos[id])
-        # self.aruco[id].rotation.w = sumrw/len(pos[id])   
-        
-    def getTranslationAndRotation(transform): 
-        return transform[0], transform[1]
-
+           
     def callback(self,data):
         #print('in callback')
         now = rospy.Time.now()
         for i in range(len(data.transforms)):
             frame = data.transforms[i]
             #print(frame)
-            self.aruco[frame.fiducial_id] = frame.transform
-            translation = (self.aruco[frame.fiducial_id].translation.x, self.aruco[frame.fiducial_id].translation.y, self.aruco[frame.fiducial_id].translation.z)
-            rotation = (self.aruco[frame.fiducial_id].rotation.x, self.aruco[frame.fiducial_id].rotation.y, self.aruco[frame.fiducial_id].rotation.z, self.aruco[frame.fiducial_id].rotation.w)
+            self.pose[frame.fiducial_id] = frame.transform
+            translation = (self.pose[frame.fiducial_id].translation.x, self.pose[frame.fiducial_id].translation.y, self.pose[frame.fiducial_id].translation.z)
+            rotation = (self.pose[frame.fiducial_id].rotation.x, self.pose[frame.fiducial_id].rotation.y, self.pose[frame.fiducial_id].rotation.z, self.pose[frame.fiducial_id].rotation.w)
             transformer = tf.Transformer()
             self.br.sendTransform(translation, rotation, rospy.Time(0), "aruco" + str(frame.fiducial_id), "camera_link")
             self.ls.waitForTransform("fiducial_" + str(frame.fiducial_id),"base_link",rospy.Time(0), rospy.Duration(15.0))
-            new_pose = self.ls.lookupTransform("base_link","fiducial_" + str(frame.fiducial_id), rospy.Time(0))
+            new_pose = list(self.ls.lookupTransform("base_link","fiducial_" + str(frame.fiducial_id), rospy.Time(0)))
             self.br.sendTransform(new_pose[0], new_pose[1], rospy.Time(0), "Aruco" + str(frame.fiducial_id), "base_link")
-            self.aruco[frame.fiducial_id]=self.avgTransform(self.pose[frame.fiducial_id],new_pose)
-            self.pose[frame.fiducial_id]=self.aruco[frame.fiducial_id]
+            self.aruco_sum[frame.fiducial_id][0]=self.sumTransform(self.aruco_temp[frame.fiducial_id][0],new_pose[0])     
+            self.aruco[frame.fiducial_id]=new_pose  
             self.br.sendTransform(new_pose[0], new_pose[1], rospy.Time(0), "Aruco" + str(frame.fiducial_id), "base_link")
+            self.aruco_count[frame.fiducial_id]+=1
+            self.aruco_temp[frame.fiducial_id][0] = self.aruco_sum[frame.fiducial_id][0]
+            rospy.set_param('/tag'+str(frame.fiducial_id),new_pose)
+            print(self.aruco_sum, self.aruco_count)
             # self.pose[frame.fiducial_id]=self.aruco[frame.fiducial_id]
             # if not self.aruco_pos.get(frame.fiducial_id):
             #     self.aruco_pos[frame.fiducial_id] = list(pose)

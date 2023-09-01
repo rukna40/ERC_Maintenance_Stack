@@ -61,10 +61,6 @@ def PlaceImu(Panel, move_group):
     waypoints.append(deepcopy(current_pose))
     (plan, fraction) = move_group.compute_cartesian_path(waypoints, 0.01, 0.0, True)
 
-    # Define velocity scaling factor
-    velocity_scaling = 0.5  # Adjust this value to control the speed (0.5 = 50% speed)
-    move_group.set_max_velocity_scaling_factor(velocity_scaling)  # Set velocity scaling factor
-
     move_group.execute(plan, wait=True)
     print("")
     print("Reached near IMU panel")
@@ -89,23 +85,31 @@ def PlaceImu(Panel, move_group):
     waypoints.append(deepcopy(current_pose))
     (plan, fraction) = move_group.compute_cartesian_path(waypoints, 0.01, 0.0, True)
 
+    # Define velocity scaling factor
+    velocity_scaling = 0.1  # Adjust this value to control the speed (0.5 = 50% speed)
+    move_group.set_max_velocity_scaling_factor(velocity_scaling)  # Set velocity scaling factor
+
     move_group.execute(plan, wait=True)
     print("")
     print("Taken IMU orientation")
 
     waypoints = []
     current_pose = move_group.get_current_pose(end_effector_link).pose
-    current_pose.position.x += Panel[0][0] + 0.056 - 0.01332 - 0.43 - 0.045
+    current_pose.position.x += Panel[0][0] - 0.5
     current_pose.position.y += Panel[0][1] - 0.042 - 0.00433 - 0.3
     waypoints.append(deepcopy(current_pose))
     print(current_pose)
 
     # Add extra waypoints to move the end effector further
     extra_waypoints = deepcopy(waypoints)
-    extra_waypoints[-1].position.x += 0.05
+    extra_waypoints[-1].position.x += 0.02
     extra_waypoints[-1].position.y += 0.0
     extra_waypoints[-1].position.z += 0.0
     waypoints.extend(extra_waypoints)
+
+# Define velocity scaling factor
+    velocity_scaling = 0.1  # Adjust this value to control the speed (0.5 = 50% speed)
+    move_group.set_max_velocity_scaling_factor(velocity_scaling)  # Set velocity scaling factor
 
     (plan, fraction) = move_group.compute_cartesian_path(waypoints, 0.01, 0.0, True)
     move_group.execute(plan)

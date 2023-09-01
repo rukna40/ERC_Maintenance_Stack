@@ -46,14 +46,24 @@ gripperPos("open")
 rospy.sleep(3)
 
 
-# scan=rospy.get_param('tag14')
-scan=[[0.378707047206316, -0.18283937512228204, -0.1344733802356643], [-0.04107175299356068, -0.050058705746646635, -0.7181035289303752, 0.692794482781875]]
+scan=rospy.get_param('tag14')
+# scan=[[0.378707047206316, -0.18283937512228204, -0.1344733802356643], [-0.04107175299356068, -0.050058705746646635, -0.7181035289303752, 0.692794482781875]]
 
 
 waypoints = []
 
 wpose = move_group.get_current_pose().pose
 wpose.position.z = scan[0][2] + 0.3
+
+waypoints.append(copy.deepcopy(wpose))
+(plan, fraction) = move_group.compute_cartesian_path(
+        waypoints, 0.01, 0.0, True)
+move_group.execute(plan, wait=True)
+
+waypoints = []
+
+wpose = move_group.get_current_pose().pose
+wpose.position.x= scan[0][0] - 0.14
 
 waypoints.append(copy.deepcopy(wpose))
 (plan, fraction) = move_group.compute_cartesian_path(

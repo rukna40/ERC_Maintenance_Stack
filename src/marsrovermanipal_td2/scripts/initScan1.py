@@ -11,7 +11,7 @@ import os
 from arucoPos import *
 from pressButton import *
 import datetime
-import json
+import csv
 
 up1 = [0,-(pi/2), 0, -(pi/2), 0, 0]
 #imu1 = [radians(91), radians(-128), radians(115), radians(-97), radians(-116), radians(117)]
@@ -19,7 +19,28 @@ imuBoard1 = [radians(17), radians(-125), radians(54), radians(-94), radians(-71)
 imu = [radians(-127), radians(-91), radians(-85), radians(-94), radians(99), radians(91)]
 imuBoard = [radians(45), radians(-99), radians(62), radians(-118), radians(-110), radians(113)]
 imu1 = [radians(-131.15), radians(-131), radians(45), radians(-157), radians(116), radians(52)]
+imuBoard2=[radians(21), radians(-103), radians(64), radians(-123), radians(-89), radians(94)]
+imuBoard3=[radians(33), radians(-57), radians(17), radians(31), radians(99), radians(-99)]
+imuBoard4=[radians(25), radians(-58), radians(16), radians(30), radians(94), radians(-95)]
+imuBoard5=[radians(25), radians(-58), radians(16), radians(30), radians(105), radians(-95)]
+imuBoard5=[radians(25), radians(-58), radians(16), radians(30), radians(105), radians(-95)]
+imuBoard6=[radians(26), radians(-65), radians(28), radians(21), radians(83), radians(-91)]
+imuBoard7=[radians(26), radians(-65), radians(28), radians(21), radians(99), radians(-91)]
+imu2 = [radians(-128), radians(-105), radians(-67), radians(-98), radians(99), radians(91)]
+imu3 = [radians(-131), radians(-107), radians(-65), radians(-91), radians(102), radians(42)]
+imu4 = [radians(-130), radians(-108), radians(-63), radians(-94), radians(90), radians(43)]
+imu5 = [radians(-118), radians(-108), radians(-63), radians(-94), radians(83), radians(57)]
+imu6 = [radians(-106), radians(-95), radians(-88), radians(-79), radians(-75), radians(151)]
+imu7 = [radians(-116), radians(-101), radians(-94), radians(-65), radians(77), radians(145)]
+imu8 = [radians(-124), radians(-114), radians(-81), radians(-63), radians(78), radians(137)]
+imu9 = [radians(-130), radians(-138), radians(26), radians(-157), radians(110), radians(52)]
+imu10 = [radians(-130), radians(-138), radians(26), radians(-157), radians(102), radians(52)]
+imu11 = [radians(-130), radians(-140), radians(29), radians(-154), radians(98), radians(52)]
 
+
+imunew1=[radians(-111), radians(-94), radians(-107), radians(-68), radians(91), radians(72)]
+imunew2=[radians(-124), radians(-109), radians(-89), radians(-72), radians(91), radians(58)]
+imunew3=[radians(-135), radians(-130), radians(-61), radians(-79), radians(92), radians(47)]
 
 
 storageArea1 = [radians(101), radians(-70), radians(-54), radians(-110), radians(136), radians(34)]
@@ -28,6 +49,8 @@ storageArea3=[radians(150),radians(-61),radians(-118),radians(-77),radians(92),r
 box= [radians(157), radians(-42), radians(-120), radians(-52), radians(86), radians(91)]
 lid= [radians(157), radians(-68), radians(-95), radians(-57), radians(89), radians(91)]
 storageArea2 = [radians(120), radians(-58), radians(-53), radians(-121), radians(107), radians(35)]
+storageArea4 = [radians(-68), radians(-106), radians(99), radians(68), radians(90), radians(-90)]
+storageArea5 = [radians(-76), radians(-88), radians(89), radians(-95), radians(-60), radians(15)]
 
 up = [0,-(pi/2), 0, -(pi/2), 0, 0]
 
@@ -37,6 +60,18 @@ buttonsBox = [radians(73), radians(-148), radians(81), radians(-52), radians(-15
 buttons_top_row = [radians(-11), radians(-133), radians(102), radians(17), radians(89), radians(-86)]
 buttons_middle_row = [radians(-10), radians(-133), radians(104), radians(37), radians(95), radians(-87)]
 buttons_bottom_row = [radians(-10), radians(-133), radians(104), radians(53), radians(94), radians(-87)]
+
+
+tag1 = [radians(12), radians(-94), radians(52), radians(-127), radians(-107), radians(89)]
+tag2 = [radians(-25), radians(-107), radians(59), radians(-121), radians(-70), radians(82)]
+tag3 = [radians(-71), radians(-115), radians(57), radians(-97), radians(-26), radians(64)]
+tag4=[radians(-27), radians(-115), radians(79), radians(-124), radians(-59), radians(81)]
+tag5=[radians(-57), radians(-118), radians(78), radians(-107), radians(-33), radians(63)]
+tag6 = [radians(-72), radians(-110), radians(68), radians(-84), radians(-21), radians(40)]
+tag7= [radians(-20), radians(-128), radians(124), radians(-144), radians(-70), radians(81)]
+tag8= [radians(-43), radians(-136), radians(124), radians(-128), radians(-50), radians(66)]
+tag9=[radians(-43), radians(-136), radians(123), radians(-131), radians(-58), radians(66)]
+ 
 
 
 
@@ -55,59 +90,94 @@ def scan():
     rospy.set_param('start', move_group.get_current_joint_values())
     gripperPos("open") 
     sleep(2)
-
+    move_group.set_max_velocity_scaling_factor(0.08)
+    move_group.set_max_acceleration_scaling_factor(0.08)
+    move_group.go(home)
     move_group.go(up)
     move_group.go(storageArea3)
+    move_group.go(storageArea4)
+    move_group.go(storageArea5)
+  
     move_group.go(storageArea1)
     move_group.go(box)
     move_group.go(lid)
     move_group.go(up)
 
-    move_group.go(imuBoard)
-    move_group.go(buttonsBox)
-    move_group.go(buttons1)
-    move_group.go(imuBoard1)
-    move_group.go(up)
-
     move_group.go(imu1)
+
+    move_group.go(imunew1)
+   
+
     move_group.go(up)
     move_group.go(imu)
 
+    move_group.go(imuBoard)
+    move_group.go(buttonsBox)
+    move_group.go(buttons1)
+   # sleep(5)
+    move_group.go(imuBoard1)
+    move_group.go(imuBoard1)
+    
+    move_group.go(imuBoard2)
+    
+    move_group.go(imuBoard3)
+    
+    move_group.go(imuBoard5)
+    move_group.go(imuBoard4)
+ 
 
 
     move_group.go(buttons_top_row)
     move_group.go(buttons_middle_row)
     move_group.go(buttons_bottom_row)
-
+    move_group.go(tag1)
+    move_group.go(tag2)
+    
+#   #  rospy.sleep(1)
+    move_group.go(tag3)
+   # 
+    move_group.go(tag4)
+    
+    move_group.go(tag5)
+    
+    #rospy.sleep(1)
+    move_group.go(tag6)
+    
+    move_group.go(tag7)
+    
+    move_group.go(tag8)
+    
+    move_group.go(tag9)
 
 
 
 
     move_group.go(now)
-
-    #move_group.go(storageArea)
-   # move_group.go(up1)
-   # move_group.go(imu1)
-    #move_group.go(up1)
-   # move_group.go(imuBoard1)
-   # move_group.go(up1)
-   # move_group.go(buttonsBox1)
-   # move_group.go(up1)
-   # move_group.go(storageArea1)
     
+
+def avgTransform(sum,count):
+    return [sum[0]/count,sum[1]/count,sum[2]/count]   
 
 def nodeKiller(toKill, aruco, override = False):
     isStart = datetime.datetime.now()
     while True:
         diff = ((datetime.datetime.now() - isStart).total_seconds())/60.0
-        if len(aruco.aruco)>=14 or diff>=6:            
+        if len(aruco.aruco)>=14 or diff>=6:         
+            for i in range(1,15):
+                if i==5 or i==6 or i==7 or i==8 or i==9:
+                    continue
+                aruco.aruco[i][0]=avgTransform(aruco.aruco_sum[i][0],aruco.aruco_count[i])   
             sleep(2)
             move_group.go(home)
             sleep(4)
             gripperPos("close")
             sleep(2)
             os.system("rosnode kill aruco_detect")
-
+            with open('aruco.csv', 'w') as f:
+                writer = csv.writer(f)
+                for key, value in aruco.aruco.items():
+                    writer.writerow([key,tuple(value)])
+                    
             try:
                 rospy.set_param('/tag1', [aruco.aruco[1][0],aruco.aruco[1][1]])
             except:

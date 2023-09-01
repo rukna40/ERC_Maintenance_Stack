@@ -123,7 +123,7 @@ def PickImu(IMU_Module,move_group):
     end = move_group.get_end_effector_link()
     wpose = move_group.get_current_pose(end).pose
     
-    wpose.position.z = IMU_Module[0][2] + 0.015 #0.044 
+    wpose.position.z = IMU_Module[0][2] + 0.04 #0.044 
     
     waypoints.append(copy.deepcopy(wpose))
     (plan, fraction) = move_group.compute_cartesian_path(
