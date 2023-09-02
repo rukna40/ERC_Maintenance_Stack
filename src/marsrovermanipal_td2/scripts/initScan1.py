@@ -123,10 +123,10 @@ def scan():
     
     move_group.go(imuBoard2)
     
-  #  move_group.go(imuBoard3)
+    move_group.go(imuBoard3)
   #  
-  #  move_group.go(imuBoard5)
-  #  move_group.go(imuBoard4)
+    move_group.go(imuBoard5)
+    move_group.go(imuBoard4)
  
 
 
@@ -147,11 +147,12 @@ def scan():
     move_group.go(tag6)
     
     move_group.go(tag7)
-    move_group.go(buttonsBox)
-    print("first scan done")
-    #move_group.go(tag8)
+    move_group.go(tag8)
     
-    #move_group.go(tag9)
+    move_group.go(tag9)
+    move_group.go(buttonsBox)
+
+    print("first scan done")
 
 
 
@@ -167,10 +168,10 @@ def nodeKiller(toKill, aruco, override = False):
     while True:
         diff = ((datetime.datetime.now() - isStart).total_seconds())/60.0
         #print(diff)
-        if len(aruco.aruco)>=14 or diff>=4.5:         
+        if diff>=5:         
             for i in range(1,15):
-                if i==5 or i==6 or i==7 or i==8 or i==9:
-                    continue
+                #if i==5 or i==6 or i==7 or i==8 or i==9:
+                 #   continue
                 aruco.aruco[i][0]=avgTransform(aruco.aruco_sum[i][0],aruco.aruco_count[i])   
             sleep(2)
             move_group.go(up)
