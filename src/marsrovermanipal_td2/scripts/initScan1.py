@@ -12,6 +12,8 @@ from arucoPos import *
 from pressButton import *
 import datetime
 import csv
+import pandas as pd
+recorded_data = []  
 
 up1 = [0,-(pi/2), 0, -(pi/2), 0, 0]
 #imu1 = [radians(91), radians(-128), radians(115), radians(-97), radians(-116), radians(117)]
@@ -71,7 +73,8 @@ tag6 = [radians(-72), radians(-110), radians(68), radians(-84), radians(-21), ra
 tag7= [radians(-20), radians(-128), radians(124), radians(-144), radians(-70), radians(81)]
 tag8= [radians(-43), radians(-136), radians(124), radians(-128), radians(-50), radians(66)]
 tag9=[radians(-43), radians(-136), radians(123), radians(-131), radians(-58), radians(66)]
- 
+#buttons1 = [radians(64), radians(-156), radians(109), radians(-132), radians(-157), radians(86)]
+buttonsBox = [radians(73), radians(-148), radians(81), radians(-52), radians(-157), radians(143)] 
 
 
 
@@ -120,10 +123,10 @@ def scan():
     
     move_group.go(imuBoard2)
     
-    move_group.go(imuBoard3)
-    
-    move_group.go(imuBoard5)
-    move_group.go(imuBoard4)
+  #  move_group.go(imuBoard3)
+  #  
+  #  move_group.go(imuBoard5)
+  #  move_group.go(imuBoard4)
  
 
 
@@ -132,7 +135,7 @@ def scan():
     move_group.go(buttons_bottom_row)
     move_group.go(tag1)
     move_group.go(tag2)
-    
+   # 
 #   #  rospy.sleep(1)
     move_group.go(tag3)
    # 
@@ -144,16 +147,17 @@ def scan():
     move_group.go(tag6)
     
     move_group.go(tag7)
+    move_group.go(buttonsBox)
+    print("first scan done")
+    #move_group.go(tag8)
     
-    move_group.go(tag8)
-    
-    move_group.go(tag9)
+    #move_group.go(tag9)
 
 
 
 
-    move_group.go(now)
-    
+   # move_group.go(up)
+    #rospy.sleep(20)
 
 def avgTransform(sum,count):
     return [sum[0]/count,sum[1]/count,sum[2]/count]   
@@ -162,21 +166,24 @@ def nodeKiller(toKill, aruco, override = False):
     isStart = datetime.datetime.now()
     while True:
         diff = ((datetime.datetime.now() - isStart).total_seconds())/60.0
-        if len(aruco.aruco)>=14 or diff>=6:         
+        #print(diff)
+        if len(aruco.aruco)>=14 or diff>=4.5:         
             for i in range(1,15):
                 if i==5 or i==6 or i==7 or i==8 or i==9:
                     continue
                 aruco.aruco[i][0]=avgTransform(aruco.aruco_sum[i][0],aruco.aruco_count[i])   
             sleep(2)
+            move_group.go(up)
+
             move_group.go(home)
             sleep(4)
             gripperPos("close")
             sleep(2)
+            recorded_data.append(aruco.aruco)
+            df = pd.DataFrame(recorded_data)
+            df.to_csv('recorded_data.csv', index=False)            
             os.system("rosnode kill aruco_detect")
-            with open('aruco.csv', 'w') as f:
-                writer = csv.writer(f)
-                for key, value in aruco.aruco.items():
-                    writer.writerow([key,tuple(value)])
+
                     
             try:
                 rospy.set_param('/tag1', [aruco.aruco[1][0],aruco.aruco[1][1]])
