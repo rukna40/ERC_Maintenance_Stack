@@ -122,7 +122,7 @@ chmod +x *.py
  ```
  Launch the Objectives.
  ```sh
- roslaunch marsrovermanipal_td2 obj1.launch.
+ roslaunch marsrovermanipal_td2 obj1.launch
  ```
  ### Launching the Objective
 To run the simulation, run `roslaunch <package_name> obj<objective_no>.launch` and the parameters if any.
