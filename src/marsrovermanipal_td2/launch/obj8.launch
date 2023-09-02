@@ -1,4 +1,0 @@
-<launch>
-<node pkg="marsrovermanipal_td2" name="closePanel" type="closePanel.py" output="screen" respawn="false">
-</node>
-</launch>

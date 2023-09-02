@@ -1,4 +1,0 @@
-<launch>
-<node pkg="marsrovermanipal_td2" name="goHome" type="goHome.py" output="screen" respawn="false">
-</node>
-</launch>

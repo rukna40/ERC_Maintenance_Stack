@@ -1,0 +1,5 @@
+<launch>
+<include file="$(find aruco_detect)/launch/aruco_detect.launch"/>
+<node pkg="marsrovermanipal_c" name="arucoScanner" type="initScan1_backup.py" output="screen" respawn="false">
+</node>
+</launch>

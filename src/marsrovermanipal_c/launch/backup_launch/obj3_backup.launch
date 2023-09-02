@@ -1,0 +1,4 @@
+<launch>
+<node pkg="marsrovermanipal_c" name="pickIMU" type="pickIMU_backup.py" output="screen" respawn="false">
+</node>
+</launch>
