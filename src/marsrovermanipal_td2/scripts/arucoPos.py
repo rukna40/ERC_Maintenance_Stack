@@ -56,9 +56,12 @@ class arucoPos:
             translation = (self.pose[frame.fiducial_id].translation.x, self.pose[frame.fiducial_id].translation.y, self.pose[frame.fiducial_id].translation.z)
             rotation = (self.pose[frame.fiducial_id].rotation.x, self.pose[frame.fiducial_id].rotation.y, self.pose[frame.fiducial_id].rotation.z, self.pose[frame.fiducial_id].rotation.w)
             transformer = tf.Transformer()
-            self.br.sendTransform(translation, rotation, rospy.Time(0), "aruco" + str(frame.fiducial_id), "camera_link")
-            self.ls.waitForTransform("fiducial_" + str(frame.fiducial_id),"base_link",rospy.Time(0), rospy.Duration(15.0))
-            new_pose = list(self.ls.lookupTransform("base_link","fiducial_" + str(frame.fiducial_id), rospy.Time(0)))
+            #self.br.sendTransform(translation, rotation, rospy.Time(0), "aruco" + str(frame.fiducial_id), "camera_link")
+            try:
+                self.ls.waitForTransform("fiducial_" + str(frame.fiducial_id),"base_link",rospy.Time(0), rospy.Duration(15.0))
+                new_pose = list(self.ls.lookupTransform("base_link","fiducial_" + str(frame.fiducial_id), rospy.Time(0)))
+            except:
+                continue
             self.br.sendTransform(new_pose[0], new_pose[1], rospy.Time(0), "Aruco" + str(frame.fiducial_id), "base_link")
             self.aruco_sum[frame.fiducial_id][0]=self.sumTransform(self.aruco_temp[frame.fiducial_id][0],new_pose[0])     
             self.aruco[frame.fiducial_id]=new_pose  
