@@ -9,7 +9,7 @@ RUN apt install ros-noetic-moveit -y
 
 RUN apt install ros-noetic-ros-controllers* -y
 RUN apt install python3
-RUN apt install python3-pandas
+RUN apt-get install python3-pandas
 ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /catkin_ws
