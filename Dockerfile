@@ -8,7 +8,8 @@ RUN rm /etc/ros/rosdep/sources.list.d/20-default.list && rosdep init && rosdep u
 RUN apt install ros-noetic-moveit -y
 
 RUN apt install ros-noetic-ros-controllers* -y
-
+RUN apt install python3
+RUN apt install python3-pandas
 ENV DEBIAN_FRONTEND=noninteractive
 
 WORKDIR /catkin_ws
