@@ -13,7 +13,7 @@ from pressButton import *
 import datetime
 import csv
 import pandas as pd
-recorded_data = []  
+recorded_data = {} 
 
 up1 = [0,-(pi/2), 0, -(pi/2), 0, 0]
 #imu1 = [radians(91), radians(-128), radians(115), radians(-97), radians(-116), radians(117)]
@@ -22,10 +22,10 @@ imu = [radians(-127), radians(-91), radians(-85), radians(-94), radians(99), rad
 imuBoard = [radians(45), radians(-99), radians(62), radians(-118), radians(-110), radians(113)]
 imu1 = [radians(-131.15), radians(-131), radians(45), radians(-157), radians(116), radians(52)]
 imuBoard2=[radians(21), radians(-103), radians(64), radians(-123), radians(-89), radians(94)]
-imuBoard3=[radians(33), radians(-57), radians(17), radians(31), radians(99), radians(-99)]
-imuBoard4=[radians(25), radians(-58), radians(16), radians(30), radians(94), radians(-95)]
-imuBoard5=[radians(25), radians(-58), radians(16), radians(30), radians(105), radians(-95)]
-imuBoard5=[radians(25), radians(-58), radians(16), radians(30), radians(105), radians(-95)]
+imuBoard3=[radians(34), radians(-73), radians(44), radians(20), radians(99), radians(-99)]
+imuBoard4=[radians(27), radians(-82), radians(54), radians(14), radians(95), radians(-95)]
+imuBoard5=[radians(33), radians(-83), radians(51), radians(25), radians(111), radians(-94)]
+#imuBoard5=[radians(25), radians(-58), radians(16), radians(30), radians(105), radians(-95)]
 imuBoard6=[radians(26), radians(-65), radians(28), radians(21), radians(83), radians(-91)]
 imuBoard7=[radians(26), radians(-65), radians(28), radians(21), radians(99), radians(-91)]
 imu2 = [radians(-128), radians(-105), radians(-67), radians(-98), radians(99), radians(91)]
@@ -52,7 +52,8 @@ box= [radians(157), radians(-42), radians(-120), radians(-52), radians(86), radi
 lid= [radians(157), radians(-68), radians(-95), radians(-57), radians(89), radians(91)]
 storageArea2 = [radians(120), radians(-58), radians(-53), radians(-121), radians(107), radians(35)]
 storageArea4 = [radians(-68), radians(-106), radians(99), radians(68), radians(90), radians(-90)]
-storageArea5 = [radians(-76), radians(-88), radians(89), radians(-95), radians(-60), radians(15)]
+storageArea5 = [radians(-88), radians(-96), radians(104), radians(-94), radians(-60), radians(0)]
+storageArea6 = [radians(-105), radians(-90), radians(56), radians(-43), radians(-62), radians(-19)]
 
 up = [0,-(pi/2), 0, -(pi/2), 0, 0]
 
@@ -98,9 +99,14 @@ def scan():
     move_group.go(home)
     move_group.go(up)
     move_group.go(storageArea3)
-    move_group.go(storageArea4)
+   # move_group.go(storageArea4)
+    move_group.go(up)
     move_group.go(storageArea5)
-  
+    move_group.go(storageArea6)
+    move_group.go(home)
+    move_group.go(storageArea2)
+    move_group.go(up)
+
     move_group.go(storageArea1)
     move_group.go(box)
     move_group.go(lid)
@@ -109,7 +115,9 @@ def scan():
     move_group.go(imu1)
 
     move_group.go(imunew1)
-   
+    move_group.go(imunew2)
+   # move_group.go(imunew3)
+  
 
     move_group.go(up)
     move_group.go(imu)
@@ -119,7 +127,7 @@ def scan():
     move_group.go(buttons1)
    # sleep(5)
     move_group.go(imuBoard1)
-    move_group.go(imuBoard1)
+  #  move_group.go(imuBoard1)
     
     move_group.go(imuBoard2)
     
@@ -168,21 +176,30 @@ def nodeKiller(toKill, aruco, override = False):
     while True:
         diff = ((datetime.datetime.now() - isStart).total_seconds())/60.0
         #print(diff)
-        if diff>=5:         
+        if diff>=5:
+
+            #print(aruco.aruco_sum)   
+            #print(aruco.aruco_count)         
+            #rospy.sleep(10)
             for i in range(1,15):
                 #if i==5 or i==6 or i==7 or i==8 or i==9:
-                 #   continue
-                aruco.aruco[i][0]=avgTransform(aruco.aruco_sum[i][0],aruco.aruco_count[i])   
-            sleep(2)
+                   # continue
+                try:
+                    aruco.aruco[i][0]=avgTransform(aruco.aruco_sum[i][0],aruco.aruco_count[i])   
+                except:
+                    continue    
             move_group.go(up)
-
+            sleep(2)
             move_group.go(home)
-            sleep(4)
+            sleep(2)
             gripperPos("close")
             sleep(2)
-            recorded_data.append(aruco.aruco)
+          
             df = pd.DataFrame(recorded_data)
-            df.to_csv('recorded_data.csv', index=False)            
+            df['Aruco ID'] = aruco.aruco.keys()
+            df['Poses'] = aruco.aruco.values()
+            #df1=df.transpose()
+            df.to_csv('/aruco.csv', index=False)            
             os.system("rosnode kill aruco_detect")
 
                     
