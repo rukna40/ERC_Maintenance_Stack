@@ -173,7 +173,8 @@ def avgTransform(sum,count):
 
 def nodeKiller(toKill, aruco, override = False):
     isStart = datetime.datetime.now()
-    while True:
+    flag=True
+    while flag:
         diff = ((datetime.datetime.now() - isStart).total_seconds())/60.0
         #print(diff)
         if diff>=5:
@@ -187,11 +188,13 @@ def nodeKiller(toKill, aruco, override = False):
                 try:
                     aruco.aruco[i][0]=avgTransform(aruco.aruco_sum[i][0],aruco.aruco_count[i])   
                 except:
-                    continue    
-            move_group.go(up)
-            sleep(2)
-            move_group.go(home)
-            sleep(2)
+                    continue
+            if flag==False: 
+                move_group.go(up)
+                sleep(2)
+                move_group.go(home)
+                sleep(2)
+            flag=False
             gripperPos("close")
             sleep(2)
                    
@@ -278,7 +281,7 @@ def nodeKiller(toKill, aruco, override = False):
             df = pd.DataFrame(recorded_data)
             df['Aruco ID'] = aruco.aruco.keys()
             df['Poses'] = aruco.aruco.values()
-            df1=df.transpose()
+            #df1=df.transpose()
             df.to_csv('/aruco.csv', index=False)   
 
             rospy.wait_for_service("erc_aruco_score")
