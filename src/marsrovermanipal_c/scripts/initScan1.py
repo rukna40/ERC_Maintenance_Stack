@@ -189,12 +189,12 @@ def nodeKiller(toKill, aruco, override = False):
                     aruco.aruco[i][0]=avgTransform(aruco.aruco_sum[i][0],aruco.aruco_count[i])   
                 except:
                     continue
-            if flag==False: 
+            if flag==True: 
                 move_group.go(up)
                 sleep(2)
                 move_group.go(home)
                 sleep(2)
-            flag=False
+                flag=False
             gripperPos("close")
             sleep(2)
                    
